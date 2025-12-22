@@ -46,6 +46,24 @@ const sendVerificationEmail = async (user, rawToken) => {
 
 const sendPasswordResetEmail = async (user, rawToken) => {
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
+
+   /* const sendEmail = async ({ to, subject, text, html }) => {
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to,
+        subject,
+        text,
+        html,
+    }; */
+   const sendEmail = async ({ to, subject, text, html }) => {
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to,
+        subject,
+        text,
+        html,
+    }}};
+    /* old one 
     await sendEmail({
         to: user.email,
         subject: 'Aurora Auth: Password Reset Request',
@@ -56,7 +74,7 @@ const sendPasswordResetEmail = async (user, rawToken) => {
             <p>This link is valid for one hour. If you did not request a reset, ignore this email.</p>
         `
     });
-};
+}; */
 
 module.exports = {
     sendEmail,
