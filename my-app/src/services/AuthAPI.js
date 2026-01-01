@@ -60,8 +60,33 @@ class AuthAPI {
     });
   }
 
-  // The other API methods (verifyEmail, resetPassword, getProfile, healthCheck, logout)
-  // would be implemented here in a similar way.
+  async verifyEmail(token) {
+    return await this.makeRequest('/auth/verify-email', {
+      method: 'POST',
+      body: JSON.stringify({ token }),
+    });
+  }
+
+  async resetPassword(token, password) {
+    return await this.makeRequest('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ token, password }),
+    });
+  }
+
+  async getProfile() {
+    return await this.makeRequest('/auth/profile', { method: 'GET' });
+  }
+
+  async healthCheck() {
+    return await this.makeRequest('/health', { method: 'GET' });
+  }
+
+  async logout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    return { success: true, message: 'Logged out successfully' };
+  }
 }
 
 export default AuthAPI;

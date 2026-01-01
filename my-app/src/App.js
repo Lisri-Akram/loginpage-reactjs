@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthContainer from './components/AuthContainer';
+import VerifyEmail from './components/VerifyEmail';
 import Stars from './components/Stars';
 import './App.css';
 
@@ -30,13 +32,18 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <Stars />
-      <div className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
-        {connectionStatus}
+    <BrowserRouter>
+      <div className="App">
+        <Stars />
+        <div className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
+          {connectionStatus}
+        </div>
+        <Routes>
+          <Route path="/verify" element={<VerifyEmail />} />
+          <Route path="/*" element={<AuthContainer config={CONFIG} />} />
+        </Routes>
       </div>
-      <AuthContainer config={CONFIG} />
-    </div>
+    </BrowserRouter>
   );
 }
 
