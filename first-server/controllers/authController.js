@@ -36,9 +36,9 @@ exports.signup = async (req, res) => {
         console.log(user);
         console.log(rawToken);
         try {
-            // Send verification email
+            // Send verification email with proper template
             console.log('Sending verification email...');
-            await sendEmail(user.email, 'Verify your email', `<p>Please verify your email </p>`);
+            await sendVerificationEmail(user, rawToken);
             console.log('Verification email sent successfully');
            
             res.status(201).json({

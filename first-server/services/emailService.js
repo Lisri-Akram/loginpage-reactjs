@@ -8,21 +8,21 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const sendEmail = async (to,subject,text) => {
+const sendEmail = async (to, subject, html) => {
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to,
         subject,
-        text,
+        html,
     };
-   try{
+   try {
       await transporter.sendMail(mailOptions);
-      return  'Email sent successfully';
+      console.log(`Email sent successfully to ${to}`);
+      return 'Email sent successfully';
    } catch (error) {
       console.error('Error sending email:', error);
-      return 'Failed to send email';
+      throw error;
    }
-  
 };
 
 const sendVerificationEmail = async (user, rawToken) => {
@@ -46,16 +46,13 @@ const sendVerificationEmail = async (user, rawToken) => {
 
 const sendPasswordResetEmail = async (user, rawToken) => {
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
-    await sendEmail({
-        to: user.email,
-        subject: 'Aurora Auth: Password Reset Request',
-        html: `
-            <h1>Password Reset</h1>
-            <p>You requested a password reset. Click below to set a new password:</p>
-            <a href="${resetUrl}" style="background-color: #3a86ff; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold;">Reset Password</a>
-            <p>This link is valid for one hour. If you did not request a reset, ignore this email.</p>
-        `
-    });
+    const html = `
+        <h1>Password Reset</h1>
+        <p>You requested a password reset. Click below to set a new password:</p>
+        <a href="${resetUrl}" style="background-color: #3a86ff; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold;">Reset Password</a>
+        <p>This link is valid for one hour. If you did not request a reset, ignore this email.</p>
+    `;
+    await sendEmail(user.email, 'Aurora Auth: Password Reset Request', html);
 };
 
 module.exports = {
